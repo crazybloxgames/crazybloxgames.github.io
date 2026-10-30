@@ -18,7 +18,7 @@ window.CRAZYBLOX = {
   // Пустой адрес скрывает иконку.
   social: {
     instagram: "https://www.instagram.com/crazyblox.studio/",
-    tiktok: "",
+    tiktok: "https://www.tiktok.com/@crazybloxgames",
     youtube: "",
     telegram: ""
   }

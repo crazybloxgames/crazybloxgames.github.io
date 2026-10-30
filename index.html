@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrazyBlox Games</title>
+<meta name="description" content="Funny mobile and browser games by CrazyBlox.">
+<meta property="og:title" content="CrazyBlox Games">
+<meta property="og:description" content="Funny mobile and browser games">
+<meta property="og:image" content="https://crazybloxgames.github.io/img/logo.webp">
+<link rel="icon" href="img/logo.webp">
+<style>
+  :root { --bg: #00b4ee; --deep: #0077c8; --ink: #14224f; --card: #fff; --yellow: #ffd800; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; color: #fff; text-align: center;
+    font-family: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", system-ui, sans-serif;
+    background: radial-gradient(circle at 50% 18%, #27e3ff 0, var(--bg) 42%, var(--deep) 100%) fixed;
+  }
+  main { max-width: 480px; margin: 0 auto; padding: 28px 16px 40px; }
+  .logo { width: 104px; height: 104px; border-radius: 50%; display: block; margin: 0 auto 10px; box-shadow: 0 6px 20px rgba(20,34,79,.3); }
+  h1 { margin: 0; font-size: 28px; line-height: 1.15; color: #fff; text-shadow: 0 2px 0 var(--ink); }
+  h1 b { color: var(--yellow); }
+  .tagline { margin: 6px 0 14px; font-size: 16px; font-weight: 600; color: var(--ink); }
+  .social { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+  .social a { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background: var(--ink); color: #fff; }
+  .social svg { width: 22px; height: 22px; }
+  h2 { margin: 22px 0 10px; font-size: 16px; color: var(--ink); text-align: left; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tile { display: flex; flex-direction: column; position: relative; border-radius: 22px; overflow: hidden; background: var(--card); color: var(--ink); text-decoration: none; box-shadow: 0 6px 16px rgba(20,34,79,.28); transition: transform .12s; }
+  .tile:active { transform: scale(.96); }
+  .tile img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+  .name { padding: 9px 8px 10px; font-size: 15px; font-weight: 800; line-height: 1.15; }
+  .tile.hero { grid-column: 1 / -1; }
+  .tile.hero img { aspect-ratio: 16 / 10; object-position: center 30%; }
+  .tile.hero .name { font-size: 19px; }
+  .hero-tag { position: absolute; right: 12px; top: 12px; padding: 7px 16px; border-radius: 999px; background: var(--yellow); color: var(--ink); font-weight: 800; font-size: 16px; }
+  .tile.all { align-items: center; justify-content: center; background: var(--yellow); font-weight: 800; font-size: 22px; }
+  @media (hover: hover) { .tile:hover { transform: translateY(-3px); } }
+</style>
+</head>
+<body>
+<main>
+  <img class="logo" src="img/logo.webp" alt="CrazyBlox logo" width="104" height="104">
+  <h1>Crazy<b>Blox</b> Games</h1>
+  <p class="tagline">Tap a game and play!</p>
+  <nav class="social" id="social" aria-label="Social media"></nav>
+  <section class="grid" id="mobile" aria-label="Mobile games"></section>
+  <h2>Play in browser</h2>
+  <section class="grid" id="browser" aria-label="Browser games"></section>
+</main>
+<script src="games.js"></script>
+<script>
+  var data = window.CRAZYBLOX;
+  var icons = {
+    instagram: '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/>',
+    tiktok: '<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M14 3c.4 3 2.3 4.8 5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>',
+    youtube: '<rect x="2" y="5" width="20" height="14" rx="4" fill="currentColor"/><path d="M10 9l5 3-5 3z" fill="#14224f"/>',
+    telegram: '<path d="M21 4L3 11l6 2 2 6 3-4 5 4z" fill="currentColor"/>'
+  };
+  function tile(game, hero) {
+    var a = document.createElement('a');
+    a.className = hero ? 'tile hero' : 'tile';
+    a.href = game.url;
+    a.rel = 'noopener';
+    a.setAttribute('aria-label', game.title);
+    var img = document.createElement('img');
+    img.src = game.img;
+    img.alt = game.title;
+    img.loading = hero ? 'eager' : 'lazy';
+    a.appendChild(img);
+    var name = document.createElement('span');
+    name.className = 'name';
+    name.textContent = game.name;
+    a.appendChild(name);
+    if (hero) {
+      var tag = document.createElement('span');
+      tag.className = 'hero-tag';
+      tag.textContent = 'Play';
+      a.appendChild(tag);
+    }
+    return a;
+  }
+  data.mobile.forEach(function (g, i) { document.getElementById('mobile').appendChild(tile(g, i === 0)); });
+  var all = document.createElement('a');
+  all.className = 'tile all';
+  all.href = data.allGames;
+  all.rel = 'noopener';
+  all.textContent = 'All games';
+  document.getElementById('mobile').appendChild(all);
+  data.browser.forEach(function (g) { document.getElementById('browser').appendChild(tile(g, false)); });
+  Object.keys(data.social).forEach(function (name) {
+    if (!data.social[name]) return;
+    var a = document.createElement('a');
+    a.href = data.social[name];
+    a.rel = 'noopener';
+    a.setAttribute('aria-label', name);
+    a.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + icons[name] + '</svg>';
+    document.getElementById('social').appendChild(a);
+  });
+</script>
+</body>
+</html>

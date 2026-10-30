@@ -78,7 +78,7 @@ window.CRAZYBLOX = {
     instagram: "https://www.instagram.com/crazyblox.studio/",
     tiktok: "https://www.tiktok.com/@crazybloxgames",
     youtube: "https://www.youtube.com/@crazybloxgames",
-    telegram: "",
+    telegram: "https://t.me/crazyblox_games",
     vk: ""
   }
 };

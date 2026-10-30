@@ -1,0 +1,43 @@
+name: Check game links
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node -e '
+            const window = {};
+            eval(require("fs").readFileSync("games.js", "utf8"));
+            const d = window.CRAZYBLOX;
+            const urls = d.games.flatMap(g => g.links.map(l => l.url));
+            urls.push(...Object.values(d.social).filter(Boolean));
+            console.log(urls.join("\n"));
+          ' > urls.txt
+          : > broken.txt
+          while read -r url; do
+            code=$(curl -sL -o /dev/null -m 30 -w '%{http_code}' -A 'Mozilla/5.0' "$url" || echo 000)
+            echo "$code $url"
+            if [ "$code" = 404 ] || [ "$code" = 410 ]; then
+              echo "- $url" >> broken.txt
+            fi
+          done < urls.txt
+          if [ -s broken.txt ]; then
+            title="Broken game links"
+            open=$(gh issue list --state open --search "$title in:title" --json number --jq length)
+            if [ "$open" = 0 ]; then
+              gh issue create --title "$title" --body-file broken.txt
+            fi
+          fi

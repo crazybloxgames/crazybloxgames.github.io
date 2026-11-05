@@ -28,6 +28,10 @@ window.CRAZYBLOX = {
       ]
     },
     {
+      name: "Meme Cat Songs", title: "Мем Песни Котов: Шлепа, Чипи Чапа, Котик Мяу Мяу", img: "img/meme-cat-songs.webp",
+      links: [{ platform: "web", label: "Yandex Games", url: "https://yandex.ru/games/app/mem-pesni-kotov-shlepa-chipi-chapa-kotik-miau-miau-463688" }]
+    },
+    {
       name: "Merge Brainrot", title: "Merge Italian Brainrot Fellas", img: "img/merge.webp",
       links: [
         { platform: "android", label: "Google Play", url: "https://play.google.com/store/apps/details?id=merge.brainrot.memes.italian.animals" },

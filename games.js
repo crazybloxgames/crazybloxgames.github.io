@@ -1,10 +1,18 @@
 // Все ссылки страницы. Первая игра показывается крупно.
 // name — короткое название на плитке, title — полное название.
+// banner — широкая картинка для большой карточки (необязательно; без неё берётся img).
 // links — где играть. Одна ссылка открывается сразу, несколько показывают окно выбора.
 // platform: "android", "ios", "web", "youtube", "roblox" или "telegram".
 // Игра снята с публикации: оставьте links: [], плитка станет серой и покажет сообщение.
 window.CRAZYBLOX = {
   games: [
+    {
+      name: "Мем Кликер", title: "Мем Кликер: музыкальный кликер с мем песнями", img: "img/mem-clicker.webp", banner: "img/mem-clicker-banner.webp",
+      links: [
+        { platform: "telegram", label: "Telegram", url: "https://t.me/meme_top_music_playlist_bot?startapp" },
+        { platform: "web", label: "Playgama", url: "https://playgama.ai/play/szpdldusfuvhpa" }
+      ]
+    },
     {
       name: "Merge Brainrot", title: "Merge Italian Brainrot Fellas", img: "img/merge.webp",
       links: [
@@ -67,10 +75,6 @@ window.CRAZYBLOX = {
         { platform: "web", label: "Playgama", url: "https://playgama.com/game/new-chat-chat-with-your-favorite-girlfriends" },
         { platform: "web", label: "Yandex Games", url: "https://yandex.ru/games/app/551160" }
       ]
-    },
-    {
-      name: "Мем Кликер", title: "Мем Кликер в Telegram", img: "img/mem-clicker.webp",
-      links: [{ platform: "telegram", label: "Telegram", url: "https://t.me/meme_top_music_playlist_bot?startapp" }]
     },
     {
       name: "DJ Beat", title: "DJ Beat Challenge: Tap the Music Beat", img: "img/dj-beat.webp",

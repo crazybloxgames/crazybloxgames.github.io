@@ -36,6 +36,7 @@
   .name { padding: 9px 8px 10px; font-size: 15px; font-weight: 800; line-height: 1.15; }
   .tile.hero { grid-column: 1 / -1; }
   .tile.hero img { aspect-ratio: 16 / 10; object-position: center 30%; }
+  .tile.hero img.banner { aspect-ratio: 1635 / 962; object-position: center; }
   .tile.hero .name { font-size: 19px; }
   .badges { position: absolute; left: 8px; top: 8px; display: flex; gap: 4px; }
   .badge { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(20,34,79,.82); color: #fff; }
@@ -45,7 +46,7 @@
   .sheet { position: fixed; inset: 0; z-index: 10; display: none; align-items: flex-end; justify-content: center; background: rgba(10,30,70,.6); }
   .sheet.open { display: flex; }
   .panel { width: 100%; max-width: 480px; padding: 20px 16px calc(20px + env(safe-area-inset-bottom)); border-radius: 24px 24px 0 0; background: var(--card); color: var(--ink); }
-  .panel img { width: 88px; height: 88px; border-radius: 18px; display: block; margin: 0 auto 8px; }
+  .panel img { width: 88px; height: 88px; border-radius: 18px; object-fit: cover; display: block; margin: 0 auto 8px; }
   .panel h2 { margin: 0 0 14px; font-size: 20px; }
   .choice { display: flex; align-items: center; gap: 12px; margin-top: 10px; padding: 9px 14px 9px 9px; border-radius: 18px; background: #eef6fd; color: var(--ink); text-align: left; text-decoration: none; box-shadow: 0 4px 0 #c7dcf0; transition: transform .12s, box-shadow .12s; }
   .choice:active { transform: translateY(3px); box-shadow: 0 1px 0 #c7dcf0; }
@@ -157,7 +158,8 @@
       a.rel = 'noopener';
     }
     var img = document.createElement('img');
-    img.src = game.img;
+    img.src = hero && game.banner ? game.banner : game.img;
+    if (hero && game.banner) img.className = 'banner';
     img.alt = game.title;
     img.loading = hero ? 'eager' : 'lazy';
     a.appendChild(img);

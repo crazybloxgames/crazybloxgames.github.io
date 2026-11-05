@@ -7,7 +7,7 @@
 window.CRAZYBLOX = {
   games: [
     {
-      name: "Мем Кликер", title: "Мем Кликер: музыкальный кликер с мем песнями", img: "img/mem-clicker.webp", banner: "img/mem-clicker-banner.webp",
+      name: "Meme Clicker", title: "Meme Clicker: Music Tap with Meme Songs", img: "img/mem-clicker.webp", banner: "img/mem-clicker-banner.webp",
       links: [
         { platform: "telegram", label: "Telegram", url: "https://t.me/meme_top_music_playlist_bot?startapp" },
         { platform: "web", label: "Playgama", url: "https://playgama.ai/play/szpdldusfuvhpa" }

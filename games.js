@@ -1,10 +1,29 @@
-// Все ссылки страницы. Первая игра показывается крупно.
+// Все ссылки страницы. Порядок игр задаёт список order ниже.
 // name — короткое название на плитке, title — полное название.
 // banner — широкая картинка для большой карточки (необязательно; без неё берётся img).
 // links — где играть. Одна ссылка открывается сразу, несколько показывают окно выбора.
 // platform: "android", "ios", "web", "youtube", "roblox" или "telegram".
 // Игра снята с публикации: оставьте links: [], плитка станет серой и покажет сообщение.
 window.CRAZYBLOX = {
+  // ПОРЯДОК ИГР НА САЙТЕ. Меняй местами строки ниже — так игры и встанут.
+  // Первая — большая карточка наверху. Название пишется точно как name у игры.
+  // Игры, которых нет в этом списке, встанут в конец.
+  order: [
+    "Meme Clicker",
+    "Prison Escape",
+    "New Chat",
+    "Meme Cat Songs",
+    "Merge Brainrot",
+    "Guess the Meme",
+    "Memory Cards",
+    "Music Tunnel",
+    "Soccer Star",
+    "Catch Soccer Ball",
+    "Meme Songs",
+    "Mem Dunk",
+    "DJ Beat",
+  ],
+
   games: [
     {
       name: "Meme Clicker", title: "Meme Clicker: Music Tap with Meme Songs", img: "img/mem-clicker.webp", banner: "img/mem-clicker-banner.webp",

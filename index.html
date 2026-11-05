@@ -197,7 +197,12 @@
     return a;
   }
   var grid = document.getElementById('games');
-  data.games.forEach(function (g, i) { grid.appendChild(tile(g, i === 0)); });
+  var order = data.order || [];
+  var rank = function (g) { var i = order.indexOf(g.name); return i < 0 ? order.length : i; };
+  data.games
+    .map(function (g, i) { return { g: g, i: i }; })
+    .sort(function (a, b) { return rank(a.g) - rank(b.g) || a.i - b.i; })
+    .forEach(function (x, i) { grid.appendChild(tile(x.g, i === 0)); });
   Object.keys(data.social).forEach(function (name) {
     if (!data.social[name]) return;
     var a = document.createElement('a');

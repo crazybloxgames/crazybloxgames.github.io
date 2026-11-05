@@ -14,6 +14,20 @@ window.CRAZYBLOX = {
       ]
     },
     {
+      name: "Prison Escape", title: "Prison Escape: Push the Guards", img: "img/prison-escape.webp",
+      links: [
+        { platform: "web", label: "Playgama", url: "https://playgama.com/game/prison-escape-push-the-guards" },
+        { platform: "web", label: "itch.io", url: "https://crazyblox-games.itch.io/robby-escape-push-the-police" }
+      ]
+    },
+    {
+      name: "New Chat", title: "New Chat: Chat With Your Favorite Girlfriends", img: "img/new-chat.webp",
+      links: [
+        { platform: "web", label: "Playgama", url: "https://playgama.com/game/new-chat-chat-with-your-favorite-girlfriends" },
+        { platform: "web", label: "Yandex Games", url: "https://yandex.ru/games/app/551160" }
+      ]
+    },
+    {
       name: "Merge Brainrot", title: "Merge Italian Brainrot Fellas", img: "img/merge.webp",
       links: [
         { platform: "android", label: "Google Play", url: "https://play.google.com/store/apps/details?id=merge.brainrot.memes.italian.animals" },
@@ -59,22 +73,8 @@ window.CRAZYBLOX = {
       links: [{ platform: "web", label: "Yandex Games", url: "https://yandex.ru/games/app/536160" }]
     },
     {
-      name: "Prison Escape", title: "Prison Escape: Push the Guards", img: "img/prison-escape.webp",
-      links: [
-        { platform: "web", label: "Playgama", url: "https://playgama.com/game/prison-escape-push-the-guards" },
-        { platform: "web", label: "itch.io", url: "https://crazyblox-games.itch.io/robby-escape-push-the-police" }
-      ]
-    },
-    {
       name: "Mem Dunk", title: "Мем Данк на Яндекс Играх", img: "img/mem-dunk.webp",
       links: [{ platform: "web", label: "Yandex Games", url: "https://yandex.ru/games/app/477586" }]
-    },
-    {
-      name: "New Chat", title: "New Chat: Chat With Your Favorite Girlfriends", img: "img/new-chat.webp",
-      links: [
-        { platform: "web", label: "Playgama", url: "https://playgama.com/game/new-chat-chat-with-your-favorite-girlfriends" },
-        { platform: "web", label: "Yandex Games", url: "https://yandex.ru/games/app/551160" }
-      ]
     },
     {
       name: "DJ Beat", title: "DJ Beat Challenge: Tap the Music Beat", img: "img/dj-beat.webp",

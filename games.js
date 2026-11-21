@@ -9,9 +9,11 @@ window.CRAZYBLOX = {
   // Первая — большая карточка наверху. Название пишется точно как name у игры.
   // Игры, которых нет в этом списке, встанут в конец.
   order: [
-    "Meme Clicker",
-    "Prison Escape",
+    "BallBlox Party",
     "New Chat",
+    "Minecart",
+    "Prison Escape",
+    "Meme Clicker",
     "Meme Cat Songs",
     "Merge Brainrot",
     "Guess the Meme",
@@ -26,6 +28,14 @@ window.CRAZYBLOX = {
 
   games: [
     {
+      name: "BallBlox Party", title: "BallBlox Party: Ball Balance Party Games", img: "img/ballblox.webp", banner: "img/ballblox-banner.webp",
+      links: [{ platform: "web", label: "Playgama", url: "https://playgama.ai/play/xecawnghh7gzf3" }]
+    },
+    {
+      name: "Minecart", title: "Minecart: Gem Sort Puzzle", img: "img/minecart.webp",
+      links: [{ platform: "web", label: "Playgama", url: "https://playgama.com/game/minecart-gem-sort-puzzle" }]
+    },
+    {
       name: "Meme Clicker", title: "Meme Clicker: Music Tap with Meme Songs", img: "img/mem-clicker.webp", banner: "img/mem-clicker-banner.webp",
       links: [
         { platform: "telegram", label: "Telegram", url: "https://t.me/meme_top_music_playlist_bot?startapp" },
@@ -36,6 +46,7 @@ window.CRAZYBLOX = {
       name: "Prison Escape", title: "Prison Escape: Push the Guards", img: "img/prison-escape.webp",
       links: [
         { platform: "web", label: "Playgama", url: "https://playgama.com/game/prison-escape-push-the-guards" },
+        { platform: "android", label: "Google Play", url: "https://play.google.com/store/apps/details?id=com.memetok.push.fall.dudes" },
         { platform: "web", label: "itch.io", url: "https://crazyblox-games.itch.io/robby-escape-push-the-police" }
       ]
     },

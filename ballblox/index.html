@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BallBlox Party — party-игра на огромных шарах</title>
+<meta name="description" content="Яркая 3D party-игра: остров-хаб и 4 мини-игры, где все балансируют на огромных мячах. Играй в браузере.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://crazybloxgames.github.io/ballblox/">
+<meta property="og:title" content="BallBlox Party — party-игра на огромных шарах">
+<meta property="og:description" content="3D-остров и 4 мини-игры: футбол, горячая картошка, гонка над лавой и клавиатура-раскраска. Играй в браузере.">
+<meta property="og:image" content="https://crazybloxgames.github.io/ballblox/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b74d8">
+<link rel="icon" href="img/icon.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&text=BallBloxPartySoccerHotLavaRceinKeybd&display=swap">
+<script>document.documentElement.className = 'js';</script>
+<style>
+  :root { --sky:#18c3f6; --blue:#0b74d8; --deep:#0a4aa6; --ink:#14224f; --yellow:#ffd800; --green:#2fcf4f; --orange:#ff8a1f; --red:#ff4a3d; --purple:#8b5cf6; --cream:#fff8e6; }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { margin:0; color:var(--ink); background:var(--cream); font-family:Nunito,"Segoe UI",system-ui,sans-serif; font-weight:600; font-size:17px; line-height:1.45; overflow-x:hidden; }
+  img { display:block; max-width:100%; height:auto; }
+  .wrap { max-width:1140px; margin:0 auto; padding:0 18px; }
+  h1, h2, h3 { margin:0; line-height:1.08; font-weight:900; }
+  p { margin:0; }
+
+  /* Кнопка */
+  .play { display:inline-flex; align-items:center; gap:12px; padding:15px 30px 15px 18px; border:4px solid var(--ink); border-radius:999px; background:var(--yellow); color:var(--ink); font-size:22px; font-weight:900; text-decoration:none; box-shadow:0 7px 0 var(--ink); transition:transform .12s, box-shadow .12s; }
+  .play:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 10px 0 var(--ink); }
+  .play:active { transform:translateY(5px); box-shadow:0 2px 0 var(--ink); }
+  .play i { width:40px; height:40px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--green); border:3px solid var(--ink); }
+  .play i::before { content:""; margin-left:4px; border-left:13px solid #fff; border-top:9px solid transparent; border-bottom:9px solid transparent; }
+  .play.pulse { animation:pulse 2.2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 70%, 100% { transform:none; } 80% { transform:scale(1.06) rotate(-1.5deg); } 90% { transform:scale(1.02) rotate(1deg); } }
+
+  /* Шапка */
+  .hero { position:relative; color:#fff; background:linear-gradient(180deg, var(--blue), var(--deep)); overflow:hidden; }
+  .hero-bg img { width:100%; }
+  .topbar { position:absolute; z-index:3; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between; padding-top:14px; }
+  .studio-logo { width:150px; filter:drop-shadow(0 4px 0 rgba(20,34,79,.35)); transition:transform .15s; }
+  .studio-logo:hover { transform:rotate(-3deg) scale(1.05); }
+  .hero-in { position:relative; z-index:2; padding-top:22px; padding-bottom:70px; }
+  .hero::after { content:""; position:absolute; z-index:2; left:0; right:0; bottom:-1px; height:46px; background:var(--cream); clip-path:polygon(0 60%, 8% 30%, 18% 55%, 30% 20%, 42% 50%, 55% 25%, 68% 55%, 80% 25%, 91% 50%, 100% 30%, 100% 100%, 0 100%); }
+
+  /* Логотип игры: мяч вместо «o» */
+  .logo { font-family:Fredoka, Nunito, sans-serif; font-weight:700; line-height:.9; letter-spacing:-.01em; color:#fff; -webkit-text-stroke:.15em var(--ink); paint-order:stroke fill; text-shadow:0 .08em 0 var(--ink); }
+  .logo .l1 { display:block; font-size:clamp(64px, 17vw, 118px); white-space:nowrap; }
+  .logo .l2 { display:block; font-size:clamp(58px, 15vw, 104px); color:var(--yellow); margin:.02em 0 0 .3em; transform:rotate(-3deg); transform-origin:left; }
+  .o-slot { position:relative; display:inline-block; width:.74em; height:.74em; margin:0 .02em 0 .03em; vertical-align:-.03em; }
+  .o-slot svg { width:100%; height:100%; cursor:pointer; filter:drop-shadow(0 .06em 0 var(--ink)); animation:rock 2.6s ease-in-out infinite; }
+  .o-slot.away svg { visibility:hidden; }
+  .o-slot.away::after { content:""; position:absolute; inset:12%; border:4px dashed rgba(255,255,255,.7); border-radius:50%; }
+  @keyframes rock { 0%, 100% { transform:rotate(-8deg); } 50% { transform:rotate(8deg) translateY(-4%); } }
+  #flyball { position:fixed; left:0; top:0; z-index:50; display:none; cursor:pointer; filter:drop-shadow(0 4px 0 rgba(20,34,79,.9)); will-change:transform; touch-action:manipulation; }
+  #flyball svg { width:100%; height:100%; display:block; position:relative; }
+  #flyball::before { content:""; position:absolute; inset:-32px; border-radius:50%; }
+  .juggle-wrap { position:fixed; left:0; top:0; z-index:51; pointer-events:none; }
+  #juggle { display:block; transform:translate(-50%, -100%); opacity:0; font-family:Fredoka, Nunito, sans-serif; font-weight:700; font-size:34px; color:var(--yellow); -webkit-text-stroke:.16em var(--ink); paint-order:stroke fill; text-shadow:0 3px 0 var(--ink); white-space:nowrap; }
+  #juggle.pop { animation:jpop .9s ease-out forwards; }
+  @keyframes jpop { 0% { opacity:1; transform:translate(-50%, -60%) scale(.6); } 20% { transform:translate(-50%, -110%) scale(1.25); } 100% { opacity:0; transform:translate(-50%, -190%) scale(1); } }
+  .to-top { position:fixed; z-index:60; left:50%; bottom:20px; display:flex; align-items:center; gap:8px; padding:10px 20px 10px 12px; border:4px solid var(--ink); border-radius:999px; background:#fff; color:var(--ink); font:inherit; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 5px 0 var(--ink); transform:translate(-50%, 140%); opacity:0; pointer-events:none; transition:transform .35s cubic-bezier(.2,1.4,.4,1), opacity .2s; }
+  .to-top span { width:30px; height:30px; display:grid; place-items:center; border-radius:50%; background:var(--blue); color:#fff; font-size:13px; border:3px solid var(--ink); }
+  .to-top.show { transform:translate(-50%, 0); opacity:1; pointer-events:auto; }
+  .to-top:active { transform:translate(-50%, 4px); box-shadow:0 1px 0 var(--ink); }
+  .shadow-ball { position:fixed; z-index:49; left:0; top:0; display:none; height:10px; border-radius:50%; background:rgba(20,34,79,.25); pointer-events:none; }
+
+  .sub { margin:22px 0 16px; font-size:clamp(19px, 4.6vw, 24px); font-weight:800; max-width:520px; text-shadow:0 2px 0 rgba(20,34,79,.6); }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; max-width:520px; margin:0 0 26px; padding:0; list-style:none; }
+  .chips li { padding:6px 13px; border-radius:999px; background:rgba(20,34,79,.45); border:2px solid rgba(255,255,255,.6); font-weight:800; font-size:14px; }
+
+  /* Секции */
+  section.wrap { padding-top:56px; padding-bottom:8px; }
+  .kicker { display:inline-block; margin-bottom:12px; padding:6px 14px; border:3px solid var(--ink); border-radius:999px; background:#fff; font-weight:900; font-size:14px; text-transform:uppercase; letter-spacing:.5px; box-shadow:0 3px 0 var(--ink); }
+  h2 { font-size:clamp(30px, 7vw, 48px); margin-bottom:16px; }
+  .lead { font-size:clamp(18px, 4.4vw, 22px); font-weight:700; }
+  .lead b { font-weight:900; background:linear-gradient(transparent 55%, rgba(255,216,0,.75) 55%); }
+  .card { background:#fff; border:4px solid var(--ink); border-radius:24px; box-shadow:0 7px 0 var(--ink); }
+  .about { display:grid; gap:26px; align-items:center; }
+  .about-art { max-width:420px; margin:0 auto; overflow:hidden; transform:rotate(-2deg); }
+
+  /* Острова режимов */
+  .islands { padding-top:56px; padding-bottom:20px; }
+  .zone { position:relative; overflow:hidden; border:5px solid var(--ink); border-radius:36px; box-shadow:0 10px 0 var(--ink); }
+  .zone-in { display:grid; gap:20px; padding:24px 20px 26px; align-items:center; position:relative; z-index:1; }
+  .zone-num { display:inline-block; padding:5px 12px; border:3px solid var(--ink); border-radius:999px; background:#fff; color:var(--ink); font-weight:900; font-size:13px; text-transform:uppercase; letter-spacing:.5px; box-shadow:0 3px 0 var(--ink); }
+  .zone h3 { margin:12px 0 4px; font-family:Fredoka, Nunito, sans-serif; font-weight:700; font-size:clamp(44px, 11vw, 72px); color:#fff; -webkit-text-stroke:.12em var(--ink); paint-order:stroke fill; text-shadow:0 .07em 0 var(--ink); }
+  .zone .ru { font-size:22px; font-weight:900; margin-bottom:8px; }
+  .zone p.d { font-size:18px; font-weight:700; max-width:440px; }
+  .zone-shot { margin:0; overflow:hidden; border:4px solid var(--ink); border-radius:22px; box-shadow:0 7px 0 var(--ink); transform:rotate(1.5deg); background:var(--ink); }
+  .zone-shot img { width:100%; aspect-ratio:16/9; object-fit:cover; }
+  .zone .em { position:absolute; z-index:0; font-size:150px; line-height:1; opacity:.22; right:-10px; top:-20px; transform:rotate(14deg); pointer-events:none; }
+  .z-soccer { color:#fff; background:radial-gradient(circle at 50% 50%, transparent 0 88px, rgba(255,255,255,.45) 89px 94px, transparent 95px), linear-gradient(90deg, transparent calc(50% - 3px), rgba(255,255,255,.45) calc(50% - 3px) calc(50% + 3px), transparent 0), repeating-linear-gradient(90deg, #36c24a 0 70px, #2db040 70px 140px); }
+  .z-soccer .ru, .z-lava .ru, .z-paint .ru, .z-soccer .d, .z-lava .d, .z-paint .d { text-shadow:0 2px 0 rgba(20,34,79,.55); }
+  .z-potato { background:radial-gradient(rgba(255,120,20,.28) 3px, transparent 4px) 0 0 / 24px 24px, linear-gradient(160deg, #ffe08a, #ffb347); }
+  .z-potato h3 { color:var(--orange); }
+  .z-lava { color:#fff; background:radial-gradient(circle at 15% 85%, rgba(255,230,0,.55) 0 60px, transparent 120px), radial-gradient(circle at 85% 20%, rgba(255,200,0,.45) 0 50px, transparent 110px), radial-gradient(circle at 60% 70%, rgba(255,240,120,.35) 0 30px, transparent 80px), linear-gradient(160deg, #ff7a1a, #e0261c); }
+  .z-paint { color:#fff; background:linear-gradient(160deg, #7c4dff, #4a2bc2); }
+  .z-paint::after { content:""; position:absolute; left:0; right:0; bottom:0; height:22px; background:linear-gradient(90deg, #ff4a3d 0 14.3%, #ff8a1f 0 28.6%, #ffd800 0 42.9%, #2fcf4f 0 57.2%, #18c3f6 0 71.5%, #0b74d8 0 85.8%, #ff5ccd 0); border-top:4px solid var(--ink); }
+  .z-paint .zone-in { padding-bottom:46px; }
+  .bridge { width:84px; height:46px; margin:0 auto; background:repeating-linear-gradient(180deg, #b0743d 0 9px, #8a5428 9px 12px); border-left:5px solid var(--ink); border-right:5px solid var(--ink); }
+  .bridge.r { margin-right:22%; } .bridge.l { margin-left:22%; }
+
+  /* Цепочка */
+  .loop { display:grid; gap:14px; margin:0; padding:0; list-style:none; counter-reset:s; }
+  .loop li { position:relative; display:flex; align-items:center; gap:14px; padding:14px 16px; font-weight:900; font-size:18px; }
+  .loop li::before { counter-increment:s; content:counter(s); flex:none; width:46px; height:46px; display:grid; place-items:center; border-radius:50%; border:3px solid var(--ink); color:#fff; font-size:22px; font-weight:900; background:var(--c); box-shadow:0 3px 0 var(--ink); }
+  .loop li small { display:block; font-weight:700; font-size:15px; color:#46557f; }
+  .loop li:not(:last-child)::after { content:""; position:absolute; left:36px; bottom:-18px; border-left:9px solid transparent; border-right:9px solid transparent; border-top:12px solid var(--ink); z-index:1; }
+  .loop-wrap { display:grid; gap:24px; align-items:center; }
+  .loop-art { display:none; max-width:380px; margin:0 auto; transform:rotate(2deg); overflow:hidden; }
+  .fun { margin-top:22px; padding:16px 20px; background:var(--yellow); font-weight:900; font-size:19px; }
+
+  /* Чем выделяется */
+  .usp { display:grid; gap:18px; }
+  .usp .card { padding:20px 20px 22px; }
+  .usp .em { width:62px; height:62px; display:grid; place-items:center; border:3px solid var(--ink); border-radius:18px; font-size:32px; margin-bottom:12px; box-shadow:0 3px 0 var(--ink); }
+  .usp h3 { font-size:22px; margin-bottom:6px; }
+
+  /* Потенциал и план */
+  .potential { display:grid; gap:18px; margin-bottom:26px; }
+  .stat { padding:18px 20px; }
+  .stat b { display:block; font-size:28px; font-weight:900; line-height:1.1; margin-bottom:4px; }
+  .plan { display:grid; gap:12px; margin:0; padding:0; list-style:none; }
+  .plan li { display:flex; gap:14px; align-items:flex-start; padding:14px 16px; }
+  .plan .m { flex:none; width:58px; padding:6px 0; border:3px solid var(--ink); border-radius:14px; text-align:center; color:#fff; font-weight:900; font-size:13px; line-height:1.05; box-shadow:0 3px 0 var(--ink); }
+  .plan .m span { display:block; font-size:24px; }
+  .plan h3 { font-size:19px; margin-bottom:2px; }
+  .c-green { background:var(--green); } .c-orange { background:var(--orange); } .c-red { background:var(--red); } .c-purple { background:var(--purple); } .c-blue { background:var(--blue); } .c-yellow { background:var(--yellow); color:var(--ink) !important; }
+
+  /* Команда */
+  .team { padding:24px 22px; display:grid; gap:18px; align-items:center; background:linear-gradient(135deg, #fff 0, #eaf6ff 100%); }
+  .team .ava { width:110px; height:110px; border-radius:50%; border:4px solid var(--ink); box-shadow:0 4px 0 var(--ink); }
+  .roles { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; padding:0; list-style:none; }
+  .roles li { padding:6px 12px; border:3px solid var(--ink); border-radius:12px; font-weight:900; font-size:15px; color:#fff; box-shadow:0 3px 0 var(--ink); }
+
+  /* Подвал */
+  .final { position:relative; margin-top:56px; padding:76px 0 40px; text-align:center; color:#fff; background:linear-gradient(180deg, var(--blue), var(--deep)); }
+  .final::before { content:""; position:absolute; left:0; right:0; top:-1px; height:46px; background:var(--cream); clip-path:polygon(0 0, 100% 0, 100% 40%, 91% 70%, 80% 45%, 68% 75%, 55% 45%, 42% 70%, 30% 40%, 18% 65%, 8% 40%, 0 70%); }
+  .final h2 { text-shadow:0 3px 0 var(--ink); }
+  .final .studio { display:block; width:min(340px, 80%); margin:36px auto 0; transition:transform .15s; }
+  .final .studio:hover { transform:rotate(-2deg) scale(1.04); }
+  .final p { margin:14px 0 0; font-weight:800; }
+  .final p a { color:#fff; }
+
+  /* Игра на странице */
+  #play.wrap { position:relative; z-index:3; margin-top:-30px; padding-top:0; }
+  .game { position:relative; overflow:hidden; aspect-ratio:16/9; border-width:5px; border-radius:28px; box-shadow:0 10px 0 var(--ink); background:var(--ink); }
+  .game iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .game-start { position:absolute; inset:0; width:100%; padding:0; border:0; cursor:pointer; display:grid; place-items:center; align-content:center; gap:12px; background:var(--ink); color:#fff; font:inherit; }
+  .game-start img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.55; transition:transform .4s, opacity .3s; }
+  .game-start:hover img { transform:scale(1.04); opacity:.7; }
+  .game-start .play, .game-start small { position:relative; }
+  .game-start .play.big { font-size:clamp(20px, 4vw, 30px); animation:pulse 2.2s ease-in-out infinite; }
+  .game-start small { font-weight:800; font-size:15px; text-shadow:0 2px 0 var(--ink); }
+  .game-note { margin-top:16px; text-align:center; font-weight:700; font-size:15px; color:#46557f; }
+  .game-note a { color:var(--blue); font-weight:900; }
+  .fs { margin-left:8px; padding:6px 14px; border:3px solid var(--ink); border-radius:999px; background:#fff; color:var(--ink); font:inherit; font-weight:900; cursor:pointer; box-shadow:0 3px 0 var(--ink); }
+  @media (max-width:759px) { #play.wrap { margin-top:-10px; } .game { aspect-ratio:4/3; } }
+
+  /* Появление при прокрутке */
+  .js .rv { opacity:0; transform:translateY(36px) scale(.97); transition:opacity .5s ease-out, transform .6s cubic-bezier(.2,1.3,.4,1); }
+  .js .rv.in { opacity:1; transform:none; }
+
+  @media (max-width:759px) {
+    .hero-bg { position:relative; }
+    .hero-bg::after { content:""; position:absolute; left:0; right:0; bottom:0; height:40%; background:linear-gradient(transparent, var(--blue)); }
+    .hero-in { margin-top:-56px; }
+  }
+  @media (min-width:760px) {
+    .hero { min-height:min(56.25vw, 860px); display:flex; align-items:center; background:radial-gradient(60% 80% at 0 0, #18c3f6, transparent 70%), #0b74d8; }
+    .hero-bg { position:absolute; top:0; bottom:0; right:0; width:57%; }
+    .hero-bg picture, .hero-bg img { width:100%; height:100%; object-fit:cover; object-position:30% 40%; }
+    .hero-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg, #0b74d8 0, rgba(11,116,216,.6) 12%, rgba(11,116,216,0) 32%); }
+    .hero-in { width:100%; padding-top:110px; padding-bottom:110px; }
+    .studio-logo { width:210px; }
+    .usp { grid-template-columns:repeat(3, 1fr); }
+    .potential { grid-template-columns:1.3fr 1fr 1fr; }
+    .plan { grid-template-columns:1fr 1fr; }
+    .loop-wrap { grid-template-columns:1.35fr 1fr; }
+    .loop-art { display:block; }
+    .about { grid-template-columns:1.2fr 1fr; }
+    .team { grid-template-columns:auto 1fr; padding:30px 34px; }
+    .zone-in { grid-template-columns:1fr 1.15fr; padding:40px 44px; gap:40px; }
+    .zone.flip .zone-text { order:2; }
+    .zone.flip .em { right:auto; left:-10px; }
+    .z-paint .zone-in { padding-bottom:64px; }
+  }
+  @media (min-width:960px) {
+    body { font-size:18px; }
+    section.wrap { padding-top:76px; }
+    .plan { grid-template-columns:repeat(3, 1fr); }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    .o-slot svg, .play.pulse { animation:none; }
+    .js .rv { opacity:1; transform:none; transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><clipPath id="bc"><circle cx="50" cy="50" r="45"/></clipPath></defs>
+  <symbol id="ball" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="45" fill="#fff"/>
+    <g clip-path="url(#bc)">
+      <path d="M50 33V2M66.2 44.7L95.6 35.2M60 63.8L78.2 88.8M40 63.8L21.8 88.8M33.8 44.7L4.4 35.2" stroke="#14224f" stroke-width="3.5"/>
+      <g fill="#14224f">
+        <polygon points="50,33 66.2,44.7 60,63.8 40,63.8 33.8,44.7"/>
+        <circle cx="50" cy="2" r="13"/><circle cx="95.6" cy="35.2" r="13"/><circle cx="78.2" cy="88.8" r="13"/><circle cx="21.8" cy="88.8" r="13"/><circle cx="4.4" cy="35.2" r="13"/>
+      </g>
+      <ellipse cx="33" cy="27" rx="13" ry="6" fill="#fff" opacity=".75" transform="rotate(-35 33 27)"/>
+    </g>
+    <circle cx="50" cy="50" r="45" fill="none" stroke="#14224f" stroke-width="7"/>
+  </symbol>
+</svg>
+
+<header class="hero">
+  <div class="hero-bg">
+    <picture>
+      <source media="(min-width:760px)" srcset="img/cover-d.webp">
+      <img src="img/cover-m.webp" alt="Архипелаг BallBlox Party: герой на шаре в центре, вокруг острова режимов" width="900" height="816" fetchpriority="high">
+    </picture>
+  </div>
+  <div class="topbar wrap">
+    <a href="https://crazybloxgames.github.io/"><img class="studio-logo" src="img/studio.webp" alt="CrazyBlox Games" width="720" height="257"></a>
+  </div>
+  <div class="wrap hero-in">
+    <h1 class="logo" aria-label="BallBlox Party"><span class="l1" aria-hidden="true">BallBl<span class="o-slot" title="Пни мяч!"><svg viewBox="0 0 100 100"><use href="#ball"/></svg></span>x</span><span class="l2" aria-hidden="true">Party</span></h1>
+    <p class="sub">Держи равновесие на огромном мяче, толкай соперников и побеждай в четырёх безумных мини-играх.</p>
+    <ul class="chips">
+      <li>⚽ 4 мини-игры</li>
+      <li>⏱ Раунд — пара минут</li>
+      <li>🌐 Браузер · ПК · мобильные</li>
+      <li>👥 Скоро онлайн до 8 игроков</li>
+    </ul>
+    <a class="play pulse" href="#play" data-launch><i></i>Играть в браузере</a>
+  </div>
+</header>
+
+<section class="wrap" id="play">
+  <div class="game card">
+    <button class="game-start" type="button" data-launch aria-label="Запустить игру">
+      <img src="img/cover-d.webp" alt="" width="1191" height="1080">
+      <span class="play big"><i></i>Запустить игру</span>
+    </button>
+  </div>
+  <p class="game-note">Если игра не запускается — <a href="https://crazyblox-games.itch.io/ballblox-party" rel="noopener">откройте её на itch.io</a>. <button type="button" class="fs" id="fs" hidden>⛶ На весь экран</button></p>
+</section>
+
+<div id="flyball" aria-hidden="true"><svg viewBox="0 0 100 100"><use href="#ball"/></svg></div>
+<div class="shadow-ball" id="ballshadow"></div>
+<div class="juggle-wrap" aria-hidden="true"><span id="juggle"></span></div>
+<button class="to-top" id="totop" type="button" aria-label="Наверх"><span aria-hidden="true">▲</span>Наверх</button>
+
+<main>
+  <section class="wrap" id="about">
+    <div class="about">
+      <div class="rv">
+        <span class="kicker">О чём игра</span>
+        <h2>Цирк на шаре, только с друзьями</h2>
+        <p class="lead">Яркий блочный архипелаг. Ты стоишь на <b>огромном шаре</b> и держишь равновесие: разгоняешься, прыгаешь, толкаешь других. Хаб — живой остров с ботами, магазином и заданиями, а мостики ведут к <b>островам режимов</b>.</p>
+      </div>
+      <div class="card about-art rv"><img src="img/hero.webp" alt="Герой в синем худи балансирует на огромном пляжном мяче" width="1000" height="1099" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="wrap islands" id="modes">
+    <div class="rv">
+      <span class="kicker">4 острова — 4 режима</span>
+      <h2>Одна механика — четыре игры</h2>
+    </div>
+
+    <article class="zone z-soccer rv">
+      <span class="em" aria-hidden="true">⚽</span>
+      <div class="zone-in">
+        <div class="zone-text">
+          <span class="zone-num">Остров 1</span>
+          <h3>Soccer</h3>
+          <p class="ru">Футбол гигантским мячом</p>
+          <p class="d">Закати огромный мяч в ворота. Бонус-насос раздувает его вдвое — и вратарю конец.</p>
+        </div>
+        <figure class="zone-shot"><img src="img/soccer.webp" alt="Режим Soccer: игроки на шарах толкают огромный мяч" width="800" height="450" loading="lazy"></figure>
+      </div>
+    </article>
+    <div class="bridge r" aria-hidden="true"></div>
+
+    <article class="zone z-potato flip rv">
+      <span class="em" aria-hidden="true">💣</span>
+      <div class="zone-in">
+        <div class="zone-text">
+          <span class="zone-num">Остров 2</span>
+          <h3>Hot Potato</h3>
+          <p class="ru">Горячая картошка с бомбой</p>
+          <p class="d">Передай бомбу касанием, пока не рванула. Игра на выбывание — остаётся последний.</p>
+        </div>
+        <figure class="zone-shot"><img src="img/potato.webp" alt="Режим Hot Potato: игроки передают бомбу" width="800" height="450" loading="lazy"></figure>
+      </div>
+    </article>
+    <div class="bridge l" aria-hidden="true"></div>
+
+    <article class="zone z-lava rv">
+      <span class="em" aria-hidden="true">🔥</span>
+      <div class="zone-in">
+        <div class="zone-text">
+          <span class="zone-num">Остров 3</span>
+          <h3>Lava Race</h3>
+          <p class="ru">Гонка над лавой</p>
+          <p class="d">Полоса препятствий, где каждый прыжок на шаре — риск. Финишируй первым и не нырни в лаву.</p>
+        </div>
+        <figure class="zone-shot"><img src="img/lava.webp" alt="Режим Lava Race: гонка на шарах над лавой" width="800" height="450" loading="lazy"></figure>
+      </div>
+    </article>
+    <div class="bridge r" aria-hidden="true"></div>
+
+    <article class="zone z-paint flip rv">
+      <span class="em" aria-hidden="true">🎨</span>
+      <div class="zone-in">
+        <div class="zone-text">
+          <span class="zone-num">Остров 4</span>
+          <h3>Paint Keyboard</h3>
+          <p class="ru">Клавиатура-раскраска</p>
+          <p class="d">Две команды катаются по гигантской клавиатуре и красят клавиши. Чьих больше — те и победили.</p>
+        </div>
+        <figure class="zone-shot"><img src="img/paint.webp" alt="Режим Paint Keyboard: команды красят клавиши" width="800" height="450" loading="lazy"></figure>
+      </div>
+    </article>
+  </div>
+
+  <section class="wrap" id="loop">
+    <div class="rv">
+      <span class="kicker">Что делает игрок</span>
+      <h2>Всегда есть «ещё один раунд»</h2>
+    </div>
+    <div class="loop-wrap">
+      <ol class="loop">
+        <li class="card rv" style="--c:var(--blue)"><span>Катается и дурачится в хабе<small>Шаром управляешь с первой секунды — меню нет</small></span></li>
+        <li class="card rv" style="--c:var(--green)"><span>Заезжает на остров режима<small>Режимы и острова открываются по мере игры</small></span></li>
+        <li class="card rv" style="--c:var(--orange)"><span>Лобби 25 секунд<small>Пустые места занимают боты с пометкой AI</small></span></li>
+        <li class="card rv" style="--c:var(--red)"><span>Матч → монеты и награда за место</span></li>
+        <li class="card rv" style="--c:var(--purple)"><span>Задания, сундук, 19 скинов и мячи<small>Сундук каждые 5 минут, ежедневный бонус</small></span></li>
+      </ol>
+      <div class="card loop-art rv"><img src="img/hero-run.webp" alt="Герой мчится на шаре по острову" width="700" height="747" loading="lazy"></div>
+    </div>
+    <p class="card fun rv">Раунд короткий, правила понятны за секунду, а проигрыш — смешной, а не обидный.</p>
+  </section>
+
+  <section class="wrap" id="usp">
+    <div class="rv">
+      <span class="kicker">Чем выделяется</span>
+      <h2>Три козыря</h2>
+    </div>
+    <div class="usp">
+      <div class="card rv"><div class="em c-yellow">🎪</div><h3>Физика «шар + наездник»</h3><p>Одна простая механика, из которой растут все режимы. Падения и толкотня сами просятся в клипы и стримы.</p></div>
+      <div class="card rv"><div class="em c-green">🏝️</div><h3>Хаб — это игра, а не меню</h3><p>Живой остров: боты дразнят, зовут на матч, кидают предметы. Играть начинаешь сразу.</p></div>
+      <div class="card rv"><div class="em c-blue">🧩</div><h3>Дёшево расширять</h3><p>Новый режим = новый остров на той же механике. Ещё 6 режимов уже есть в заготовках.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap" id="plan">
+    <div class="rv">
+      <span class="kicker">Потенциал</span>
+      <h2>Куда растёт игра</h2>
+    </div>
+    <div class="potential">
+      <div class="card stat rv"><b>ПК, затем консоли</b>Физические party-игры с друзьями — устойчивый жанр, его двигают стримеры и короткие видео. Геймпад уже в плане, так что адаптация под консоли — вероятный следующий шаг.</div>
+      <div class="card stat rv"><b>$4.99–7.99</b>Премиум + косметика, без pay-to-win.</div>
+      <div class="card stat rv"><b>Веб и мобайл</b>Бесплатная версия — воронка и проверка режимов. Сборки уже есть.</div>
+    </div>
+    <h2 class="rv" style="font-size:clamp(24px,5.5vw,32px)">План на 6 месяцев</h2>
+    <ol class="plan">
+      <li class="card rv"><span class="m c-blue"><span>1</span>мес.</span><div><h3>Онлайн-ядро</h3>Хаб на 8 игроков, первые 2 режима по сети.</div></li>
+      <li class="card rv"><span class="m c-green"><span>2</span>мес.</span><div><h3>Все режимы онлайн</h3>Игра с друзьями и быстрый поиск, страница игры в магазине.</div></li>
+      <li class="card rv"><span class="m c-orange"><span>3</span>мес.</span><div><h3>Новые острова</h3>+3 режима из заготовок, хаб вдвое больше, закрытый плейтест.</div></li>
+      <li class="card rv"><span class="m c-red"><span>4</span>мес.</span><div><h3>Прогрессия и демо</h3>Уровни, аксессуары, таблицы лидеров, публичное демо.</div></li>
+      <li class="card rv"><span class="m c-purple"><span>5</span>мес.</span><div><h3>Соцслой</h3>Чат, эмоции, приватные комнаты, геймпад, 8–10 режимов, 5 языков.</div></li>
+      <li class="card rv"><span class="m c-yellow"><span>6</span>мес.</span><div><h3>Релиз</h3>Бета-выходные, баланс по метрикам, релиз 1.0.</div></li>
+    </ol>
+  </section>
+
+  <section class="wrap" id="team">
+    <div class="rv">
+      <span class="kicker">Как сделано</span>
+      <h2>Один автор + студия ИИ-агентов</h2>
+    </div>
+    <div class="card team rv">
+      <img class="ava" src="../img/logo.webp" alt="CrazyBlox" width="110" height="110" loading="lazy">
+      <div>
+        <p class="lead" style="font-size:19px">Автор ведёт игру, пишет сеть, принимает решения и проводит плейтесты. Остальные роли закрывают ИИ-агенты — за две недели ноября они собрали хаб, магазин, задания, сундук и мобильную сборку.</p>
+        <ul class="roles">
+          <li class="c-blue">Геймдизайн</li><li class="c-green">Код</li><li class="c-orange">UI</li><li class="c-red">Арт</li><li class="c-purple">Звук</li><li class="c-blue">QA</li><li class="c-green">Маркетинг</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="final">
+  <div class="wrap">
+    <h2>Прыгай на мяч — и погнали!</h2>
+    <a class="play" href="#play" data-launch><i></i>Играть в браузере</a>
+    <a href="https://crazybloxgames.github.io/"><img class="studio" src="img/studio.webp" alt="CrazyBlox Games" width="720" height="257" loading="lazy"></a>
+    <p><a href="https://crazybloxgames.github.io/">Другие игры студии</a> · © 2026 CrazyBlox</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Появление блоков при прокрутке
+  var rv = document.querySelectorAll('.rv');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    rv.forEach(function (el) { io.observe(el); });
+  } else { rv.forEach(function (el) { el.classList.add('in'); }); }
+
+  // Игра: грузим встраиваемый плеер itch только по нажатию
+  var box = document.querySelector('.game'), fsBtn = document.getElementById('fs'), loaded = false;
+  function launch() {
+    if (loaded) return; loaded = true;
+    var f = document.createElement('iframe');
+    f.src = 'https://itch.io/embed-upload/20790008?color=0b74d8';
+    f.title = 'BallBlox Party';
+    f.allow = 'autoplay; fullscreen *; gamepad; accelerometer; gyroscope';
+    f.allowFullscreen = true;
+    box.textContent = ''; box.appendChild(f);
+    if (box.requestFullscreen) fsBtn.hidden = false;
+  }
+  document.querySelectorAll('[data-launch]').forEach(function (b) {
+    b.addEventListener('click', function (e) {
+      e.preventDefault(); launch();
+      document.getElementById('play').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+  fsBtn.addEventListener('click', function () { box.requestFullscreen(); });
+
+  // Кнопка «Наверх»: появляется, когда прокрутку остановили на 5+ секунд или начали крутить вверх
+  var totop = document.getElementById('totop'), idle = 0, prevS = scrollY, autoUp = false;
+  function showTop(v) { totop.classList.toggle('show', v && scrollY > innerHeight * 0.8); }
+  addEventListener('scroll', function () {
+    var d = scrollY - prevS; prevS = scrollY;
+    clearTimeout(idle);
+    if (autoUp) { if (scrollY < 5) autoUp = false; return; }
+    if (d < -2) showTop(true); else if (d > 2) showTop(false);
+    if (scrollY < innerHeight * 0.8) showTop(false);
+    idle = setTimeout(function () { showTop(true); }, 5000);
+  }, { passive: true });
+  totop.addEventListener('click', function () { autoUp = true; totop.classList.remove('show'); scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  // Мяч из логотипа: на прокрутке выпадает, падает вниз экрана и прыгает
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var slot = document.querySelector('.o-slot'), ball = document.getElementById('flyball'), sh = document.getElementById('ballshadow');
+  var mode = 'home', x = 0, y = 0, vx = 0, vy = 0, rot = 0, size = 64, lastY = scrollY, last = 0, raf = 0;
+  var G = 0.55, BOUNCE = 0.62, MINTOP = 20, on = null, prevTop = new Map(), pass = new Set(), juggles = 0, jug = document.getElementById('juggle');
+  var solids = [].slice.call(document.querySelectorAll('.card, .zone, .game'));
+
+  // Звук отскока: синтез Web Audio (браузер разрешает звук после первого клика/тапа/клавиши)
+  var actx = null, lastBump = 0;
+  function ensureAudio() {
+    if (!actx) { var A = window.AudioContext || window.webkitAudioContext; if (!A) return; actx = new A(); }
+    if (actx.state === 'suspended') actx.resume();
+  }
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (e) { addEventListener(e, ensureAudio, { passive: true }); });
+  function bump(speed) {
+    if (!actx || actx.state !== 'running') return;
+    // Один и тот же «пок», меняется только громкость; мелкие касания молчат; не чаще раза в 0,2 с
+    var v = Math.min(1, speed / 14), t = actx.currentTime;
+    if (speed < 4 || t - lastBump < 0.2) return; lastBump = t;
+    var o = actx.createOscillator(), g = actx.createGain();
+    var vol = 0.25 + 0.45 * v;
+    o.type = 'sine'; o.frequency.setValueAtTime(260, t); o.frequency.exponentialRampToValueAtTime(90, t + 0.1);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + 0.18);
+    // мягкий «тук» удара: шум через низкочастотный фильтр
+    var len = actx.sampleRate * 0.04 | 0, buf = actx.createBuffer(1, len, actx.sampleRate), d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
+    var n = actx.createBufferSource(), f = actx.createBiquadFilter(), ng = actx.createGain();
+    n.buffer = buf; f.type = 'lowpass'; f.frequency.value = 700; ng.gain.value = vol * 0.6;
+    n.connect(f); f.connect(ng); ng.connect(actx.destination); n.start(t);
+  }
+
+  function floor() { return innerHeight - size - 14; }
+  // Верхние края карточек и островов — «полки», на которые мяч падает и от которых отскакивает
+  function platforms() {
+    var out = [];
+    solids.forEach(function (el) {
+      if (el.classList.contains('rv') && !el.classList.contains('in')) { prevTop.delete(el); return; }
+      var r = el.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight || !r.width) { prevTop.delete(el); pass.delete(el); return; }
+      if (pass.has(el) && r.top > y + size + 40) pass.delete(el);   // мяч снова выше полки — она снова твёрдая
+      var p = prevTop.has(el) ? prevTop.get(el) : r.top;
+      prevTop.set(el, r.top);
+      out.push({ el: el, top: r.top, prev: p, left: r.left, right: r.right });
+    });
+    return out;
+  }
+  function draw(ps) {
+    ball.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) rotate(' + rot + 'deg)';
+    jug.parentNode.style.transform = 'translate3d(' + (x + size / 2) + 'px,' + (y - 8) + 'px,0)';
+    var cx = x + size / 2, s = floor() + size;
+    ps.forEach(function (p) { if (!pass.has(p.el) && p.top >= MINTOP && p.top >= y + size - 2 && p.top < s && cx > p.left && cx < p.right) s = p.top; });
+    var h = Math.max(0, Math.min(1, 1 - (s - y - size) / 400));
+    sh.style.width = size * (0.5 + 0.5 * h) + 'px';
+    sh.style.opacity = h;
+    sh.style.transform = 'translate3d(' + (x + size * (0.25 - 0.25 * h)) + 'px,' + (s - 6) + 'px,0)';
+  }
+  function detach(kick) {
+    var r = slot.getBoundingClientRect();
+    size = Math.max(52, Math.min(76, r.width * 1.1));
+    x = r.left + r.width / 2 - size / 2; y = r.top + r.height / 2 - size / 2;
+    vx = (kick ? 7 : 2.5) * (x < innerWidth / 2 ? 1 : -1); vy = kick ? -12 : -3;
+    ball.style.width = ball.style.height = size + 'px';
+    ball.style.display = sh.style.display = 'block';
+    slot.classList.add('away'); on = null; prevTop.clear();
+    mode = 'free'; start();
+    if (kick) bump(10);
+  }
+  function grounded() { return on || y > floor() - 40; }
+  function hop(power) {
+    if (mode === 'free' && grounded()) { on = null; vy = -power; vx += (Math.random() - 0.5) * 4; }
+  }
+  function step(t) {
+    var dt = last ? Math.min(2.5, (t - last) / 16.67) : 1; last = t;
+    var ps = platforms();
+    if (mode === 'free') {
+      var maxX = innerWidth - size - 6, prevBottom = y + size, cx;
+      vy += G * dt; x += vx * dt; y += vy * dt;
+      if (x < 6) { x = 6; bump(Math.abs(vx)); vx = Math.abs(vx) * 0.7; }
+      if (x > maxX) { x = maxX; bump(Math.abs(vx)); vx = -Math.abs(vx) * 0.7; }
+      cx = x + size / 2;
+      if (on) {
+        var cur = null;
+        ps.forEach(function (p) { if (p.el === on) cur = p; });
+        if (!cur || cur.top < MINTOP || cx < cur.left || cx > cur.right) on = null;   // скатился с края или полка ушла вверх
+        else { y = cur.top - size; vy = 0; vx *= Math.pow(0.985, dt); }
+      }
+      // Потолок: верх окна подпирает мяч — полки под ним «теряют силу», и мяч проваливается вниз
+      if (y < 0) {
+        y = 0; if (vy < 0) { bump(-vy); vy = -vy * 0.3; }
+        if (on) { pass.add(on); on = null; }
+        ps.forEach(function (p) { if (p.top < size + 30) pass.add(p.el); });
+        vy = Math.max(vy, 1.5);
+      }
+      if (!on) {
+        var hit = null;
+        ps.forEach(function (p) {
+          if (pass.has(p.el) || p.top < MINTOP || cx < p.left + 4 || cx > p.right - 4) return;
+          if (prevBottom <= p.prev + 1 && y + size >= p.top && (!hit || p.top < hit.top)) hit = p;
+        });
+        if (hit) {
+          juggles = 0;
+          var pv = (hit.top - hit.prev) / dt, rel = vy - pv;
+          y = hit.top - size;
+          if (rel > 2.4) { vy = pv - rel * BOUNCE; vx *= 0.92; bump(rel); }
+          else { vy = 0; on = hit.el; }
+        }
+      }
+      var f = floor();
+      if (y > f) { on = null; juggles = 0; y = f; bump(vy); vy = -vy * BOUNCE; if (Math.abs(vy) < 1.6) vy = 0; vx *= 0.88; }
+      if (y >= f - 0.5) vx *= Math.pow(0.985, dt);
+      rot += vx * dt * 360 / (Math.PI * size);
+    } else if (mode === 'back') {
+      var r = slot.getBoundingClientRect(), tx = r.left + r.width / 2 - size / 2, ty = r.top + r.height / 2 - size / 2;
+      x += (tx - x) * 0.2 * dt; y += (ty - y) * 0.2 * dt; rot *= 0.85;
+      if (Math.abs(tx - x) + Math.abs(ty - y) < 2) {
+        mode = 'home'; ball.style.display = sh.style.display = 'none'; slot.classList.remove('away'); raf = 0; last = 0; return;
+      }
+    }
+    draw(ps);
+    raf = requestAnimationFrame(step);
+  }
+  function start() { if (!raf) { last = 0; raf = requestAnimationFrame(step); } }
+  addEventListener('scroll', function () {
+    var dy = scrollY - lastY; lastY = scrollY;
+    var top = slot.getBoundingClientRect().top;
+    if (mode === 'home' && dy > 0 && top <= 0) detach(false);
+    else if (mode === 'free' && dy < 0 && top > 40) { mode = 'back'; on = null; sh.style.display = 'none'; start(); }
+    else if (mode === 'free' && Math.abs(dy) > 2) hop(Math.min(11, 4 + Math.abs(dy) * 0.12));
+  }, { passive: true });
+  slot.addEventListener('click', function () { if (mode === 'home') detach(true); });
+  // Набивание: каждый клик/тап подбивает мяч вверх, даже в воздухе; счётчик — пока мяч не коснулся полки
+  ball.addEventListener('pointerdown', function (e) {
+    if (mode !== 'free') return;
+    e.preventDefault(); ensureAudio();
+    on = null; bump(12);
+    vy = Math.min(vy, 0) - 13;
+    vy = Math.max(vy, -20);
+    vx = (x + size / 2 - e.clientX) * 0.22 + (Math.random() - 0.5) * 3;
+    juggles++;
+    if (juggles >= 2) {
+      jug.textContent = '×' + juggles;
+      jug.classList.remove('pop'); void jug.offsetWidth; jug.classList.add('pop');
+    }
+  });
+})();
+</script>
+</body>
+</html>

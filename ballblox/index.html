@@ -160,7 +160,13 @@
   .game-start small { font-weight:800; font-size:15px; text-shadow:0 2px 0 var(--ink); }
   .game-note { margin-top:16px; text-align:center; font-weight:700; font-size:15px; color:#46557f; }
   .game-note a { color:var(--blue); font-weight:900; }
-  .fs { margin-left:8px; padding:6px 14px; border:3px solid var(--ink); border-radius:999px; background:#fff; color:var(--ink); font:inherit; font-weight:900; cursor:pointer; box-shadow:0 3px 0 var(--ink); }
+  .fs { display:block; margin:12px auto 0; padding:10px 22px; border:4px solid var(--ink); border-radius:999px; background:var(--yellow); color:var(--ink); font:inherit; font-size:18px; font-weight:900; cursor:pointer; box-shadow:0 4px 0 var(--ink); }
+  .fs[hidden] { display:none; }
+  .game .x { display:none; position:absolute; z-index:2; top:max(10px, env(safe-area-inset-top)); right:max(10px, env(safe-area-inset-right)); width:46px; height:46px; place-items:center; padding:0; border:3px solid var(--ink); border-radius:50%; background:#fff; color:var(--ink); font-size:22px; font-weight:900; cursor:pointer; box-shadow:0 3px 0 var(--ink); }
+  .game.max { position:fixed; inset:0; z-index:1000; width:100vw; height:100vh; height:100dvh; aspect-ratio:auto; border:0; border-radius:0; box-shadow:none; }
+  .game.max .x, .game:fullscreen .x { display:grid; }
+  .noscroll, .noscroll body { overflow:hidden; }
+  .noscroll #flyball, .noscroll .shadow-ball, .noscroll .juggle-wrap, .noscroll .to-top { display:none !important; }
   @media (max-width:759px) { #play.wrap { margin-top:-10px; } .game { aspect-ratio:4/3; } }
 
   /* Появление при прокрутке */
@@ -429,16 +435,36 @@
     f.title = 'BallBlox Party';
     f.allow = 'autoplay; fullscreen *; gamepad; accelerometer; gyroscope';
     f.allowFullscreen = true;
-    box.textContent = ''; box.appendChild(f);
-    if (box.requestFullscreen) fsBtn.hidden = false;
+    var x = document.createElement('button');
+    x.type = 'button'; x.className = 'x'; x.setAttribute('aria-label', 'Свернуть игру'); x.textContent = '✕';
+    x.addEventListener('click', exitFull);
+    box.textContent = ''; box.appendChild(f); box.appendChild(x);
+    fsBtn.hidden = false;
   }
+  // На весь экран: настоящий полноэкранный режим, а где его нет (iPhone) или он не сработал — растягиваем рамку на весь экран сами
+  function pseudo(on) { box.classList.toggle('max', on); document.documentElement.classList.toggle('noscroll', on); }
+  function goFull() {
+    var req = box.requestFullscreen || box.webkitRequestFullscreen;
+    if (!req) { pseudo(true); return; }
+    try {
+      var p = req.call(box);
+      var lock = function () { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(function () {}); };
+      if (p && p.then) p.then(lock, function () { pseudo(true); }); else lock();
+    } catch (e) { pseudo(true); }
+  }
+  function exitFull() {
+    pseudo(false);
+    var ex = document.exitFullscreen || document.webkitExitFullscreen;
+    if ((document.fullscreenElement || document.webkitFullscreenElement) && ex) ex.call(document);
+  }
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') pseudo(false); });
   document.querySelectorAll('[data-launch]').forEach(function (b) {
     b.addEventListener('click', function (e) {
       e.preventDefault(); launch();
       document.getElementById('play').scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   });
-  fsBtn.addEventListener('click', function () { box.requestFullscreen(); });
+  fsBtn.addEventListener('click', goFull);
 
   // Кнопка «Наверх»: появляется, когда прокрутку остановили на 5+ секунд или начали крутить вверх
   var totop = document.getElementById('totop'), idle = 0, prevS = scrollY, autoUp = false;

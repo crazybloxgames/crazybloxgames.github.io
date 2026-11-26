@@ -139,6 +139,26 @@
   .roles { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; padding:0; list-style:none; }
   .roles li { padding:6px 12px; border:3px solid var(--ink); border-radius:12px; font-weight:900; font-size:15px; color:#fff; box-shadow:0 3px 0 var(--ink); }
 
+  /* Чем сделано */
+  .tools { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:0 0 18px; padding:0; list-style:none; }
+  .tools li { display:grid; grid-template-columns:auto 1fr; grid-template-rows:auto auto; column-gap:12px; align-items:center; padding:12px 14px; border-radius:20px; }
+  .tools .ti { grid-row:1 / 3; }
+  .tools b { font-size:17px; font-weight:900; line-height:1.15; }
+  .tools small, .plat small { display:block; font-size:14px; font-weight:700; color:#46557f; line-height:1.25; }
+  .ti { width:48px; height:48px; flex:none; display:grid; place-items:center; border:3px solid var(--ink); border-radius:14px; font-size:24px; box-shadow:0 3px 0 var(--ink); }
+  .ti.big { width:64px; height:64px; border-radius:18px; font-size:32px; }
+  .platforms { display:grid; gap:14px; }
+  .plat { display:flex; align-items:center; gap:16px; padding:16px 20px; }
+  .plat b { display:block; font-size:24px; font-weight:900; }
+  @media (max-width:759px) {
+    .tools li { grid-template-columns:1fr; grid-template-rows:auto; row-gap:6px; align-items:start; align-content:start; padding:12px; }
+    .tools small { margin-top:-4px; }
+    .tools .ti { grid-row:auto; width:42px; height:42px; font-size:21px; border-radius:12px; }
+    .tools b { font-size:16px; }
+    .tools small { font-size:13px; }
+  }
+  @media (min-width:760px) { .tools { grid-template-columns:repeat(4, 1fr); } .platforms { grid-template-columns:1fr 1fr; } }
+
   /* Подвал */
   .final { position:relative; margin-top:56px; padding:76px 0 40px; text-align:center; color:#fff; background:linear-gradient(180deg, var(--blue), var(--deep)); }
   .final::before { content:""; position:absolute; left:0; right:0; top:-1px; height:46px; background:var(--cream); clip-path:polygon(0 0, 100% 0, 100% 40%, 91% 70%, 80% 45%, 68% 75%, 55% 45%, 42% 70%, 30% 40%, 18% 65%, 8% 40%, 0 70%); }
@@ -402,6 +422,27 @@
           <li class="c-blue">Геймдизайн</li><li class="c-green">Код</li><li class="c-orange">UI</li><li class="c-red">Арт</li><li class="c-purple">Звук</li><li class="c-blue">QA</li><li class="c-green">Маркетинг</li>
         </ul>
       </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="stack">
+    <div class="rv">
+      <span class="kicker">Чем сделано</span>
+      <h2>Инструменты и платформы</h2>
+    </div>
+    <ul class="tools">
+      <li class="card rv"><span class="ti c-blue">🎮</span><b>Unity</b><small>движок, сборки</small></li>
+      <li class="card rv"><span class="ti c-orange">🤖</span><b>Claude Code</b><small>код, UI, геймдизайн</small></li>
+      <li class="card rv"><span class="ti c-green">🎨</span><b>Codex (GPT)</b><small>арт и тексты</small></li>
+      <li class="card rv"><span class="ti c-purple">✨</span><b>Antigravity (Gemini)</b><small>код и арт</small></li>
+      <li class="card rv"><span class="ti c-blue">🖌️</span><b>Photoshop</b><small>доводка арта</small></li>
+      <li class="card rv"><span class="ti c-red">📐</span><b>Figma</b><small>макеты интерфейса</small></li>
+      <li class="card rv"><span class="ti c-orange">🧊</span><b>Blender</b><small>3D-модели</small></li>
+      <li class="card rv"><span class="ti c-yellow">🎵</span><b>ElevenLabs · Suno</b><small>звук и музыка</small></li>
+    </ul>
+    <div class="platforms">
+      <div class="card rv plat"><span class="ti big c-green">🌐</span><div><b>HTML5</b><small>WebGL, играй прямо в браузере</small></div></div>
+      <div class="card rv plat"><span class="ti big c-blue">📱</span><div><b>Android</b><small>мобильная версия</small></div></div>
     </div>
   </section>
 </main>

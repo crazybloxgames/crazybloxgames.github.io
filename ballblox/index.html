@@ -15,6 +15,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b74d8">
 <link rel="icon" href="img/icon.webp">
+<link rel="alternate" hreflang="ru" href="https://crazybloxgames.github.io/ballblox/">
+<link rel="alternate" hreflang="en" href="https://crazybloxgames.github.io/ballblox/en/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap">
@@ -45,6 +47,10 @@
   .topbar { position:absolute; z-index:3; top:0; left:0; right:0; display:flex; align-items:center; justify-content:space-between; padding-top:14px; }
   .studio-logo { width:150px; filter:drop-shadow(0 4px 0 rgba(20,34,79,.35)); transition:transform .15s; }
   .studio-logo:hover { transform:rotate(-3deg) scale(1.05); }
+  .lang { display:flex; gap:4px; padding:4px; border:3px solid var(--ink); border-radius:999px; background:#fff; box-shadow:0 3px 0 var(--ink); font-weight:900; font-size:15px; }
+  .lang b, .lang a { padding:5px 11px; border-radius:999px; color:var(--ink); text-decoration:none; }
+  .lang b { background:var(--yellow); }
+  .lang a:hover { background:#eaf6ff; }
   .hero-in { position:relative; z-index:2; padding-top:22px; padding-bottom:70px; }
   .hero::after { content:""; position:absolute; z-index:2; left:0; right:0; bottom:-1px; height:46px; background:var(--cream); clip-path:polygon(0 60%, 8% 30%, 18% 55%, 30% 20%, 42% 50%, 55% 25%, 68% 55%, 80% 25%, 91% 50%, 100% 30%, 100% 100%, 0 100%); }
 
@@ -93,7 +99,7 @@
   .zone .ru { font-size:22px; font-weight:900; margin-bottom:8px; }
   .zone p.d { font-size:18px; font-weight:700; max-width:440px; }
   .zone-shot { margin:0; overflow:hidden; border:4px solid var(--ink); border-radius:22px; box-shadow:0 7px 0 var(--ink); transform:rotate(1.5deg); background:var(--ink); }
-  .zone-shot img { width:100%; aspect-ratio:16/9; object-fit:cover; }
+  .zone-shot img, .zone-shot video { display:block; width:100%; aspect-ratio:16/9; object-fit:cover; }
   .zone .em { position:absolute; z-index:0; font-size:150px; line-height:1; opacity:.22; right:-10px; top:-20px; transform:rotate(14deg); pointer-events:none; }
   .z-soccer { color:#fff; background:radial-gradient(circle at 50% 50%, transparent 0 88px, rgba(255,255,255,.45) 89px 94px, transparent 95px), linear-gradient(90deg, transparent calc(50% - 3px), rgba(255,255,255,.45) calc(50% - 3px) calc(50% + 3px), transparent 0), repeating-linear-gradient(90deg, #36c24a 0 70px, #2db040 70px 140px); }
   .z-soccer .ru, .z-lava .ru, .z-paint .ru, .z-soccer .d, .z-lava .d, .z-paint .d { text-shadow:0 2px 0 rgba(20,34,79,.55); }
@@ -177,6 +183,9 @@
   .game-start:hover img { transform:scale(1.04); opacity:.7; }
   .game-start .play, .game-start small { position:relative; }
   .game-start .play.big { font-size:clamp(20px, 4vw, 30px); animation:pulse 2.2s ease-in-out infinite; }
+  .play.solo { padding:12px; }
+  .play.solo i { width:clamp(64px, 12vw, 96px); height:clamp(64px, 12vw, 96px); border-width:4px; }
+  .play.solo i::before { margin-left:8px; border-left-width:clamp(22px, 4vw, 34px); border-top-width:clamp(14px, 2.6vw, 22px); border-bottom-width:clamp(14px, 2.6vw, 22px); }
   .game-start small { font-weight:800; font-size:15px; text-shadow:0 2px 0 var(--ink); }
   .game-note { margin-top:16px; text-align:center; font-weight:700; font-size:15px; color:#46557f; }
   .game-note a { color:var(--blue); font-weight:900; }
@@ -255,6 +264,7 @@
   </div>
   <div class="topbar wrap">
     <a href="https://crazybloxgames.github.io/"><img class="studio-logo" src="img/studio.webp" alt="CrazyBlox Games" width="720" height="257"></a>
+    <nav class="lang" aria-label="Язык"><b>RU</b><a href="en/" hreflang="en" lang="en">EN</a></nav>
   </div>
   <div class="wrap hero-in">
     <h1 class="logo" aria-label="BallBlox Party"><span class="l1" aria-hidden="true">BallBl<span class="o-slot" title="Пни мяч!"><svg viewBox="0 0 100 100"><use href="#ball"/></svg></span>x</span><span class="l2" aria-hidden="true">Party</span></h1>
@@ -273,7 +283,7 @@
   <div class="game card">
     <button class="game-start" type="button" data-launch aria-label="Запустить игру">
       <img src="img/cover-d.webp" alt="" width="1191" height="1080">
-      <span class="play big"><i></i>Запустить игру</span>
+      <span class="play big solo" aria-hidden="true"><i></i></span>
     </button>
   </div>
   <p class="game-note">Если игра не запускается — <a href="https://crazyblox-games.itch.io/ballblox-party" rel="noopener">откройте её на itch.io</a>. <button type="button" class="fs" id="fs" hidden>⛶ На весь экран</button></p>
@@ -311,7 +321,7 @@
           <p class="ru">Футбол гигантским мячом</p>
           <p class="d">Закати огромный мяч в ворота. Бонус-насос раздувает его вдвое — и вратарю конец.</p>
         </div>
-        <figure class="zone-shot"><img src="img/soccer.webp" alt="Режим Soccer: игроки на шарах толкают огромный мяч" width="800" height="450" loading="lazy"></figure>
+        <figure class="zone-shot"><video class="clip" muted loop playsinline preload="none" poster="img/soccer-poster.webp" aria-label="Режим Soccer: игроки на шарах толкают огромный мяч"><source data-src="img/soccer.mp4" type="video/mp4"></video></figure>
       </div>
     </article>
     <div class="bridge r" aria-hidden="true"></div>
@@ -325,7 +335,7 @@
           <p class="ru">Горячая картошка с бомбой</p>
           <p class="d">Передай бомбу касанием, пока не рванула. Игра на выбывание — остаётся последний.</p>
         </div>
-        <figure class="zone-shot"><img src="img/potato.webp" alt="Режим Hot Potato: игроки передают бомбу" width="800" height="450" loading="lazy"></figure>
+        <figure class="zone-shot"><video class="clip" muted loop playsinline preload="none" poster="img/potato-poster.webp" aria-label="Режим Hot Potato: игроки передают бомбу"><source data-src="img/potato.mp4" type="video/mp4"></video></figure>
       </div>
     </article>
     <div class="bridge l" aria-hidden="true"></div>
@@ -339,7 +349,7 @@
           <p class="ru">Гонка над лавой</p>
           <p class="d">Полоса препятствий, где каждый прыжок на шаре — риск. Финишируй первым и не нырни в лаву.</p>
         </div>
-        <figure class="zone-shot"><img src="img/lava.webp" alt="Режим Lava Race: гонка на шарах над лавой" width="800" height="450" loading="lazy"></figure>
+        <figure class="zone-shot"><video class="clip" muted loop playsinline preload="none" poster="img/lava-poster.webp" aria-label="Режим Lava Race: гонка на шарах над лавой"><source data-src="img/lava.mp4" type="video/mp4"></video></figure>
       </div>
     </article>
     <div class="bridge r" aria-hidden="true"></div>
@@ -353,7 +363,7 @@
           <p class="ru">Клавиатура-раскраска</p>
           <p class="d">Две команды катаются по гигантской клавиатуре и красят клавиши. Чьих больше — те и победили.</p>
         </div>
-        <figure class="zone-shot"><img src="img/paint.webp" alt="Режим Paint Keyboard: команды красят клавиши" width="800" height="450" loading="lazy"></figure>
+        <figure class="zone-shot"><video class="clip" muted loop playsinline preload="none" poster="img/paint-poster.webp" aria-label="Режим Paint Keyboard: команды красят клавиши"><source data-src="img/paint.mp4" type="video/mp4"></video></figure>
       </div>
     </article>
   </div>
@@ -466,6 +476,22 @@
     }, { rootMargin: '0px 0px -8% 0px' });
     rv.forEach(function (el) { io.observe(el); });
   } else { rv.forEach(function (el) { el.classList.add('in'); }); }
+
+  // Ролики режимов: грузим и крутим, только когда карточка на экране
+  var clips = document.querySelectorAll('video.clip');
+  if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var vio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) {
+          var src = v.querySelector('source');
+          if (src && !src.src) { src.src = src.getAttribute('data-src'); v.load(); }
+          var p = v.play(); if (p && p.catch) p.catch(function () {});
+        } else v.pause();
+      });
+    }, { threshold: 0.25 });
+    clips.forEach(function (v) { vio.observe(v); });
+  }
 
   // Игра: грузим встраиваемый плеер itch только по нажатию
   var box = document.querySelector('.game'), fsBtn = document.getElementById('fs'), loaded = false;
@@ -660,7 +686,7 @@
     vy = Math.max(vy, -20);
     vx = (x + size / 2 - e.clientX) * 0.22 + (Math.random() - 0.5) * 3;
     juggles++;
-    if (juggles >= 2) {
+    if (juggles >= 1) {
       jug.textContent = '×' + juggles;
       jug.classList.remove('pop'); void jug.offsetWidth; jug.classList.add('pop');
     }
